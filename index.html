@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>우리반 칭찬 릴레이</title>
+<style>
+:root{
+  --bg:#fff8ee; --card:#ffffff; --ink:#3b3228; --sub:#8a7b6b; --line:#f0e3d0;
+  --main:#ff8a5b; --main-d:#e8703f; --pink:#ff6f91; --yellow:#ffd166; --green:#4cb88a; --blue:#5b9bff;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+header{background:linear-gradient(135deg,#ff9a6b,#ff6f91);color:#fff;padding:22px 16px 18px;text-align:center}
+header h1{margin:0;font-size:1.7rem;letter-spacing:-.5px}
+header p{margin:4px 0 0;opacity:.92;font-size:.95rem}
+.wrap{max-width:860px;margin:0 auto;padding:14px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:12px}
+.bar label{font-size:.85rem;color:var(--sub);margin-right:6px}
+select,input[type=text],input[type=password],textarea{font:inherit;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff;color:var(--ink)}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--main)}
+textarea{width:100%;resize:vertical;min-height:90px}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tab{flex:1;min-width:110px;padding:11px 8px;border:none;border-radius:12px;background:#fff;border:1px solid var(--line);font:inherit;font-weight:700;color:var(--sub);cursor:pointer}
+.tab.on{background:var(--main);color:#fff;border-color:var(--main)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(120,80,30,.05)}
+.card h2{margin:0 0 6px;font-size:1.15rem}
+.hint{color:var(--sub);font-size:.88rem;margin:0 0 10px}
+button.btn{background:var(--main);color:#fff;border:none;border-radius:10px;padding:10px 18px;font:inherit;font-weight:700;cursor:pointer}
+button.btn:hover{background:var(--main-d)}
+button.btn.ghost{background:#fff;color:var(--main);border:1.5px solid var(--main)}
+button.btn.red{background:#e5586b}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.post{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;background:#fffdf9}
+.post .head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.9rem;margin-bottom:4px}
+.post .who{font-weight:800}
+.post .arrow{color:var(--pink);margin:0 4px}
+.post .text{white-space:pre-wrap;word-break:break-word}
+.post .foot{display:flex;gap:8px;margin-top:8px;align-items:center}
+.like{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:3px 12px;cursor:pointer;font:inherit;font-size:.88rem}
+.like.on{background:#ffe9ef;border-color:var(--pink);color:var(--pink);font-weight:700}
+.del{margin-left:auto;border:none;background:none;color:#c2536b;cursor:pointer;font-size:.85rem}
+.mine{border-color:var(--yellow);background:#fffbe9}
+.empty{text-align:center;color:var(--sub);padding:22px 8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{padding:5px 11px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font:inherit;font-size:.88rem;cursor:pointer}
+.chip.done{background:#e6f6ee;border-color:var(--green);color:#2b8a60}
+.chip.sel{background:var(--main);color:#fff;border-color:var(--main)}
+.chip[disabled]{opacity:.4;cursor:not-allowed}
+/* 칭찬왕 */
+.podium{display:flex;justify-content:center;align-items:flex-end;gap:10px;margin:14px 0 6px}
+.pod{flex:1;max-width:190px;text-align:center;border-radius:14px 14px 0 0;padding:12px 6px;color:#fff}
+.pod .medal{font-size:2rem}
+.pod .nm{font-weight:800;font-size:1.1rem}
+.pod .ct{font-size:.9rem;opacity:.95}
+.p1{background:linear-gradient(#ffcf3f,#f0a500);height:170px}
+.p2{background:linear-gradient(#c3ccd6,#9aa6b4);height:135px}
+.p3{background:linear-gradient(#e0a577,#c07a45);height:110px}
+.crown{font-size:2.4rem;animation:bob 1.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:center}
+th{color:var(--sub);font-weight:700;font-size:.85rem}
+td.l{text-align:left}
+.bar-in{height:10px;background:#ffe5d6;border-radius:99px;overflow:hidden;min-width:80px}
+.bar-in i{display:block;height:100%;background:linear-gradient(90deg,var(--main),var(--pink))}
+.fall{position:fixed;top:-30px;font-size:1.6rem;pointer-events:none;animation:fall 2.8s linear forwards;z-index:99}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:.8}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#3b3228;color:#fff;padding:10px 18px;border-radius:99px;font-size:.92rem;z-index:100;opacity:0;transition:.25s;pointer-events:none}
+.toast.show{opacity:1}
+.mode{font-size:.78rem;padding:3px 9px;border-radius:99px;background:#eef;color:#456}
+.mode.cloud{background:#e6f6ee;color:#2b8a60}
+footer{text-align:center;color:var(--sub);font-size:.8rem;padding:16px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🌟 우리반 칭찬 릴레이</h1>
+  <p>나를 먼저 칭찬하고, 친구를 칭찬하고, 이달의 칭찬왕을 만나요!</p>
+</header>
+
+<div class="wrap">
+  <div class="bar">
+    <div><label for="me">나는</label><select id="me"></select></div>
+    <div><label for="month">월</label><select id="month"></select></div>
+    <span id="mode" class="mode"></span>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <main id="main"></main>
+</div>
+<footer>우리반 칭찬 릴레이 · 서로를 응원하는 따뜻한 한 달 💛</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ====================================================
+   [선택] 여러 기기에서 함께 쓰려면 Firebase 설정을 붙여 넣으세요.
+   null 이면 '이 기기(브라우저)'에만 저장되는 연습/시연 모드로 동작합니다.
+   예)
+   const FIREBASE_CONFIG = { apiKey:"...", authDomain:"...", projectId:"...", appId:"..." };
+==================================================== */
+const FIREBASE_CONFIG = null;
+
+/* ---------- 상태 ---------- */
+let state = { roster: [], pin: '0000', posts: [] };
+let me = localStorage.getItem('praise_me') || '';
+let tab = 'self';
+let isTeacher = false;
+let drafts = { self: '', relay: '', to: '' };
+const ym = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+let month = ym(new Date());
+const monthLabel = m => m.replace('-', '년 ') + '월';
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- 저장소: 로컬 ---------- */
+const LS = 'praise_class_v1';
+const local = {
+  mode: '이 기기에만 저장 (시연 모드)',
+  init(cb){ this.cb = cb; this.load(); window.addEventListener('storage', () => this.load()); },
+  load(){ state = JSON.parse(localStorage.getItem(LS) || 'null') || { roster: [], pin: '0000', posts: [] }; this.cb(); },
+  save(){ localStorage.setItem(LS, JSON.stringify(state)); this.cb(); },
+  async setPost(id, data){
+    const i = state.posts.findIndex(p => p.id === id);
+    if (i >= 0) state.posts[i] = { ...state.posts[i], ...data };
+    else state.posts.push({ id, likes: [], ...data });
+    this.save();
+  },
+  async toggleLike(id, name, on){
+    const p = state.posts.find(p => p.id === id); if (!p) return;
+    p.likes = (p.likes || []).filter(n => n !== name);
+    if (on) p.likes.push(name);
+    this.save();
+  },
+  async delPost(id){ state.posts = state.posts.filter(p => p.id !== id); this.save(); },
+  async setRoster(roster, pin){ state.roster = roster; state.pin = pin; this.save(); }
+};
+
+/* ---------- 저장소: Firebase (선택) ---------- */
+let db;
+const cloud = {
+  mode: '☁️ 모두 함께 쓰는 중',
+  async init(cb){
+    const load = src => new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+    await load('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+    await load('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
+    firebase.initializeApp(FIREBASE_CONFIG);
+    db = firebase.firestore();
+    db.collection('praise_posts').onSnapshot(s => { state.posts = s.docs.map(d => ({ id: d.id, ...d.data() })); cb(); });
+    db.doc('praise_meta/class').onSnapshot(d => { const v = d.data() || {}; state.roster = v.roster || []; state.pin = v.pin || '0000'; cb(); });
+  },
+  setPost(id, data){ return db.collection('praise_posts').doc(id).set(data, { merge: true }); },
+  toggleLike(id, name, on){
+    const f = firebase.firestore.FieldValue;
+    return db.collection('praise_posts').doc(id).set({ likes: on ? f.arrayUnion(name) : f.arrayRemove(name) }, { merge: true });
+  },
+  delPost(id){ return db.collection('praise_posts').doc(id).delete(); },
+  setRoster(roster, pin){ return db.doc('praise_meta/class').set({ roster, pin }); }
+};
+const backend = FIREBASE_CONFIG ? cloud : local;
+
+/* ---------- 유틸 ---------- */
+function toast(msg){
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function confetti(){
+  const e = ['🎉','⭐','💛','👏','🌟','💖','🎊'];
+  for (let i = 0; i < 40; i++){
+    const s = document.createElement('span'); s.className = 'fall'; s.textContent = e[i % e.length];
+    s.style.left = Math.random() * 100 + 'vw'; s.style.animationDelay = Math.random() * .8 + 's';
+    s.style.fontSize = (1.1 + Math.random() * 1.4) + 'rem';
+    document.body.appendChild(s); setTimeout(() => s.remove(), 4000);
+  }
+}
+const monthPosts = type => state.posts.filter(p => p.type === type && p.month === month).sort((a, b) => (b.ts || 0) - (a.ts || 0));
+const likeCount = p => (p.likes || []).length;
+
+function ranking(){
+  const names = state.roster.length ? state.roster : [...new Set(state.posts.filter(p => p.type === 'relay' && p.month === month).map(p => p.to))];
+  const rows = names.map(n => {
+    const got = state.posts.filter(p => p.type === 'relay' && p.month === month && p.to === n);
+    const gave = state.posts.filter(p => p.type === 'relay' && p.month === month && p.from === n).length;
+    return { name: n, got: got.length, likes: got.reduce((a, p) => a + likeCount(p), 0), gave };
+  });
+  rows.sort((a, b) => b.got - a.got || b.likes - a.likes || a.name.localeCompare(b.name, 'ko'));
+  let rank = 0, prev = null;
+  rows.forEach((r, i) => { const key = r.got + '-' + r.likes; if (key !== prev){ rank = i + 1; prev = key; } r.rank = rank; });
+  return rows;
+}
+
+/* ---------- 렌더링 ---------- */
+function renderTop(){
+  const meSel = document.getElementById('me');
+  meSel.innerHTML = '<option value="">이름 선택</option>' + state.roster.map(n => `<option ${n === me ? 'selected' : ''}>${esc(n)}</option>`).join('');
+  const months = new Set([ym(new Date()), month, ...state.posts.map(p => p.month)]);
+  const mSel = document.getElementById('month');
+  mSel.innerHTML = [...months].sort().reverse().map(m => `<option value="${m}" ${m === month ? 'selected' : ''}>${monthLabel(m)}</option>`).join('');
+  const md = document.getElementById('mode'); md.textContent = backend.mode; md.className = 'mode' + (FIREBASE_CONFIG ? ' cloud' : '');
+  const tabs = [['self','🙌 자화자찬'],['relay','💌 칭찬릴레이'],['king','👑 칭찬왕'],['admin','🔧 선생님']];
+  document.getElementById('tabs').innerHTML = tabs.map(([k, l]) => `<button class="tab ${tab === k ? 'on' : ''}" data-tab="${k}">${l}</button>`).join('');
+}
+
+function needName(){
+  return `<div class="card"><div class="empty">👆 위에서 <b>내 이름</b>을 먼저 골라 주세요.<br>${state.roster.length ? '' : '(아직 명단이 없어요. 선생님 탭에서 학생 명단을 등록해야 해요.)'}</div></div>`;
+}
+
+function viewSelf(){
+  if (!me) return needName();
+  const posts = monthPosts('self');
+  const mine = posts.find(p => p.from === me);
+  const text = drafts.self !== '' ? drafts.self : (mine ? mine.text : '');
+  const done = state.roster.filter(n => posts.some(p => p.from === n)).length;
+  return `
+  <div class="card">
+    <h2>🙌 ${monthLabel(month)} 자화자찬</h2>
+    <p class="hint">이번 달, 나 스스로에게 칭찬해 주고 싶은 점을 적어 보세요. (한 달에 한 번, 다시 저장하면 수정돼요) · 작성 ${done}/${state.roster.length}명</p>
+    <textarea id="selfText" maxlength="300" placeholder="예) 시험 기간에 끝까지 포기하지 않고 노력한 내가 대견해!">${esc(text)}</textarea>
+    <div class="row" style="margin-top:8px"><button class="btn" id="saveSelf">${mine ? '수정하기' : '자화자찬 올리기'}</button><span class="hint" style="margin:0">최대 300자</span></div>
+  </div>
+  <div class="card">
+    <h2>📣 우리반 자화자찬 모음</h2>
+    ${posts.length ? posts.map(postHTML).join('') : '<div class="empty">아직 아무도 올리지 않았어요. 첫 번째 주인공이 되어 보세요! ✨</div>'}
+  </div>`;
+}
+
+function postHTML(p){
+  const liked = (p.likes || []).includes(me);
+  const canDel = isTeacher;
+  return `<div class="post ${p.from === me || p.to === me ? 'mine' : ''}">
+    <div class="head"><span><span class="who">${esc(p.from)}</span>${p.type === 'relay' ? `<span class="arrow">➜</span><span class="who">${esc(p.to)}</span>` : ''}</span>
+      <span class="hint" style="margin:0">${p.ts ? new Date(p.ts).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' }) : ''}</span></div>
+    <div class="text">${esc(p.text)}</div>
+    <div class="foot">
+      <button class="like ${liked ? 'on' : ''}" data-like="${esc(p.id)}">${liked ? '💖' : '🤍'} ${likeCount(p) || ''} 공감</button>
+      ${canDel ? `<button class="del" data-del="${esc(p.id)}">삭제</button>` : ''}
+    </div></div>`;
+}
+
+function viewRelay(){
+  if (!me) return needName();
+  const posts = monthPosts('relay');
+  const others = state.roster.filter(n => n !== me);
+  const givenTo = new Set(posts.filter(p => p.from === me).map(p => p.to));
+  const to = drafts.to && others.includes(drafts.to) ? drafts.to : '';
+  const existing = to ? posts.find(p => p.from === me && p.to === to) : null;
+  const text = drafts.relay !== '' ? drafts.relay : (existing ? existing.text : '');
+  const received = posts.filter(p => p.to === me);
+  return `
+  <div class="card">
+    <h2>💌 ${monthLabel(month)} 칭찬릴레이</h2>
+    <p class="hint">친구 한 명을 골라 진심 어린 칭찬을 남겨요. 친구 한 명에게 한 달에 한 번 쓸 수 있어요. (✅ = 이미 칭찬함) · 나는 ${givenTo.size}/${others.length}명 칭찬했어요</p>
+    <div class="chips">${others.map(n => `<button class="chip ${givenTo.has(n) ? 'done' : ''} ${to === n ? 'sel' : ''}" data-to="${esc(n)}">${givenTo.has(n) ? '✅ ' : ''}${esc(n)}</button>`).join('') || '<span class="hint">명단이 비어 있어요.</span>'}</div>
+    ${to ? `<div style="margin-top:10px"><b>${esc(to)}</b>에게 <span class="hint">구체적인 행동·모습을 칭찬하면 더 좋아요!</span>
+      <textarea id="relayText" maxlength="200" placeholder="예) 청소 시간에 먼저 빗자루를 들어 줘서 정말 고마웠어!">${esc(text)}</textarea>
+      <div class="row" style="margin-top:8px"><button class="btn" id="sendRelay">${existing ? '칭찬 수정하기' : '칭찬 보내기 💌'}</button><span class="hint" style="margin:0">5자 이상, 최대 200자</span></div></div>` : ''}
+  </div>
+  ${received.length ? `<div class="card"><h2>🎁 나에게 온 칭찬 (${received.length})</h2>${received.map(postHTML).join('')}</div>` : ''}
+  <div class="card">
+    <h2>💬 칭찬릴레이 전체 피드</h2>
+    ${posts.length ? posts.map(postHTML).join('') : '<div class="empty">아직 칭찬이 없어요. 첫 칭찬을 시작해 볼까요? 💛</div>'}
+  </div>`;
+}
+
+function viewKing(){
+  const rows = ranking();
+  const total = state.posts.filter(p => p.type === 'relay' && p.month === month).length;
+  if (!rows.length || total === 0) return `<div class="card"><h2>👑 ${monthLabel(month)} 칭찬왕</h2><div class="empty">아직 집계할 칭찬이 없어요.<br>칭찬릴레이에서 친구를 칭찬해 주세요!</div></div>`;
+  const top = rows.filter(r => r.rank === 1);
+  const max = Math.max(1, rows[0].got);
+  const medal = ['🥇','🥈','🥉'];
+  const pod = rows.filter(r => r.rank <= 3 && r.got > 0).slice(0, 3);
+  const podHTML = pod.map(r => `<div class="pod p${r.rank}"><div class="medal">${medal[r.rank - 1]}</div><div class="nm">${esc(r.name)}</div><div class="ct">칭찬 ${r.got}개 · 공감 ${r.likes}</div></div>`);
+  // 시상대 순서: 2등-1등-3등
+  const ordered = [pod.find(r => r.rank === 2), pod.find(r => r.rank === 1), pod.find(r => r.rank === 3)].filter(Boolean).map(r => podHTML[pod.indexOf(r)]);
+  const angel = [...rows].sort((a, b) => b.gave - a.gave)[0];
+  return `
+  <div class="card" style="text-align:center">
+    <h2>👑 ${monthLabel(month)} 칭찬왕</h2>
+    <div class="crown">👑</div>
+    <div style="font-size:1.6rem;font-weight:900;color:var(--main-d)">${top.map(r => esc(r.name)).join(' · ')}</div>
+    <p class="hint">받은 칭찬 ${top[0].got}개${top.length > 1 ? ' (공동 1위!)' : ''} · 총 ${total}개의 칭찬이 오갔어요</p>
+    <button class="btn" id="celebrate">🎉 축하하기</button>
+    <div class="podium">${ordered.join('')}</div>
+  </div>
+  ${angel && angel.gave > 0 ? `<div class="card" style="text-align:center"><h2>😇 이달의 칭찬천사</h2><div style="font-weight:800;font-size:1.2rem">${esc(angel.name)}</div><p class="hint" style="margin:0">친구들에게 가장 많이 칭찬을 건넸어요 (${angel.gave}명)</p></div>` : ''}
+  <div class="card">
+    <h2>📊 전체 순위</h2>
+    <p class="hint">받은 칭찬 개수 순 · 같으면 공감(💖) 수가 많은 순</p>
+    <table><tr><th>순위</th><th>이름</th><th>받은 칭찬</th><th style="width:30%"></th><th>공감</th><th>보낸 칭찬</th></tr>
+    ${rows.map(r => `<tr><td>${r.rank <= 3 && r.got > 0 ? medal[r.rank - 1] : r.rank}</td><td class="l"><b>${esc(r.name)}</b></td><td>${r.got}</td><td><div class="bar-in"><i style="width:${r.got / max * 100}%"></i></div></td><td>${r.likes}</td><td>${r.gave}</td></tr>`).join('')}
+    </table>
+  </div>`;
+}
+
+function viewAdmin(){
+  if (!isTeacher){
+    return `<div class="card"><h2>🔧 선생님 전용</h2><p class="hint">처음 비밀번호는 <b>0000</b>입니다. 입장 후 꼭 바꿔 주세요.</p>
+      <div class="row"><input type="password" id="pinIn" placeholder="비밀번호" inputmode="numeric"><button class="btn" id="login">입장</button></div></div>`;
+  }
+  return `
+  <div class="card"><h2>👩‍🏫 학생 명단</h2><p class="hint">한 줄에 한 명씩 입력하세요. (이름이 같으면 번호를 붙여 구분: 김민준1, 김민준2)</p>
+    <textarea id="rosterIn" style="min-height:180px">${esc(state.roster.join('\n'))}</textarea>
+    <div class="row" style="margin-top:8px"><span>비밀번호 변경</span><input type="text" id="pinNew" value="${esc(state.pin)}" style="width:110px"><button class="btn" id="saveRoster">저장</button></div></div>
+  <div class="card"><h2>📥 ${monthLabel(month)} 기록 내려받기</h2><p class="hint">자화자찬·칭찬 기록을 엑셀에서 열 수 있는 CSV로 저장해요. (세특·생활기록 참고용)</p>
+    <button class="btn ghost" id="csv">CSV 내려받기</button> <button class="btn ghost" id="logout">선생님 모드 나가기</button></div>
+  <div class="card"><h2>🧹 게시물 관리</h2><p class="hint">부적절한 글은 자화자찬·칭찬릴레이 탭의 <b>삭제</b> 버튼으로 지울 수 있어요.</p></div>`;
+}
+
+function render(){
+  const ae = document.activeElement;
+  const keep = ae && ae.id ? { id: ae.id, s: ae.selectionStart, e: ae.selectionEnd } : null;
+  renderTop();
+  const main = document.getElementById('main');
+  main.innerHTML = { self: viewSelf, relay: viewRelay, king: viewKing, admin: viewAdmin }[tab]();
+  if (keep){ const el = document.getElementById(keep.id); if (el){ el.focus(); try { el.setSelectionRange(keep.s, keep.e); } catch (_) {} } }
+}
+
+/* ---------- 이벤트 ---------- */
+document.addEventListener('change', e => {
+  if (e.target.id === 'me'){ me = e.target.value; localStorage.setItem('praise_me', me); drafts = { self: '', relay: '', to: '' }; render(); }
+  if (e.target.id === 'month'){ month = e.target.value; drafts = { self: '', relay: '', to: '' }; render(); }
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'selfText') drafts.self = e.target.value;
+  if (e.target.id === 'relayText') drafts.relay = e.target.value;
+});
+document.addEventListener('click', async e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.tab){ tab = t.dataset.tab; render(); return; }
+  if (t.dataset.to){ drafts.to = t.dataset.to; drafts.relay = ''; render(); return; }
+  if (t.dataset.like){
+    if (!me) return toast('먼저 내 이름을 골라 주세요');
+    const p = state.posts.find(p => p.id === t.dataset.like);
+    await backend.toggleLike(t.dataset.like, me, !(p.likes || []).includes(me)); return;
+  }
+  if (t.dataset.del){ if (confirm('이 글을 삭제할까요?')) { await backend.delPost(t.dataset.del); toast('삭제했어요'); } return; }
+  switch (t.id){
+    case 'saveSelf': {
+      const v = document.getElementById('selfText').value.trim();
+      if (v.length < 5) return toast('조금만 더 자세히 써 볼까요? (5자 이상)');
+      await backend.setPost(`self_${month}_${me}`, { type: 'self', month, from: me, text: v, ts: Date.now() });
+      drafts.self = ''; toast('자화자찬 완료! 스스로를 칭찬해요 🙌'); break;
+    }
+    case 'sendRelay': {
+      const v = document.getElementById('relayText').value.trim();
+      if (v.length < 5) return toast('칭찬을 조금만 더 구체적으로 써 볼까요? (5자 이상)');
+      const to = drafts.to;
+      await backend.setPost(`relay_${month}_${me}_${to}`, { type: 'relay', month, from: me, to, text: v, ts: Date.now() });
+      drafts.relay = ''; drafts.to = ''; toast(`${to}에게 칭찬을 보냈어요 💌`); confetti(); break;
+    }
+    case 'celebrate': confetti(); break;
+    case 'login':
+      if (document.getElementById('pinIn').value === state.pin){ isTeacher = true; render(); } else toast('비밀번호가 달라요'); break;
+    case 'logout': isTeacher = false; render(); break;
+    case 'saveRoster': {
+      const list = [...new Set(document.getElementById('rosterIn').value.split('\n').map(s => s.trim()).filter(Boolean))];
+      const pin = document.getElementById('pinNew').value.trim() || '0000';
+      await backend.setRoster(list, pin); toast(`명단 ${list.length}명 저장 완료`); break;
+    }
+    case 'csv': {
+      const rows = state.posts.filter(p => p.month === month).sort((a, b) => a.type.localeCompare(b.type) || (a.ts || 0) - (b.ts || 0));
+      const q = s => '"' + String(s ?? '').replace(/"/g, '""') + '"';
+      const csv = '\ufeff구분,월,작성자,대상,내용,공감수\n' + rows.map(p => [p.type === 'self' ? '자화자찬' : '칭찬릴레이', p.month, p.from, p.to || '', p.text, likeCount(p)].map(q).join(',')).join('\n');
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      a.download = `칭찬릴레이_${month}.csv`; a.click(); break;
+    }
+  }
+});
+
+/* ---------- 시작 ---------- */
+(async () => {
+  try { await backend.init(render); }
+  catch (err){ console.error(err); toast('Firebase 연결 실패: 설정을 확인해 주세요'); }
+  render();
+})();
+</script>
+</body>
+</html>
